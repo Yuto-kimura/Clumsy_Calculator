@@ -2,6 +2,10 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    id("com.google.android.gms.oss-licenses-plugin")
+    kotlin("plugin.serialization") version "2.0.21"
+    id("com.diffplug.spotless") version "6.8.0"  // Spotlessプラグインを追加
+
 }
 
 android {
@@ -25,6 +29,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            signingConfig = signingConfigs.getByName("debug")
         }
     }
     compileOptions {
@@ -36,6 +41,14 @@ android {
     }
     buildFeatures {
         compose = true
+    }
+}
+
+spotless {
+    kotlin {
+        target("src/**/*.kt")  // 整形対象のKotlinファイルを指定
+        ktlint()  // Ktlintを使用してコード整形
+        targetExclude("**/Theme.kt")
     }
 }
 
@@ -63,4 +76,24 @@ dependencies {
     // AndroidX Lifecycle
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.5.1")
+
+    // oss
+    implementation("com.google.android.gms:play-services-oss-licenses:17.1.0")
+
+    val nav_version = "2.8.6"
+    // Jetpack Compose integration
+    implementation("androidx.navigation:navigation-compose:$nav_version")
+
+    // Views/Fragments integration
+    implementation("androidx.navigation:navigation-fragment:$nav_version")
+    implementation("androidx.navigation:navigation-ui:$nav_version")
+
+    // Feature module support for Fragments
+    implementation("androidx.navigation:navigation-dynamic-features-fragment:$nav_version")
+
+    // Testing Navigation
+    androidTestImplementation("androidx.navigation:navigation-testing:$nav_version")
+
+    // JSON serialization library, works with the Kotlin serialization plugin
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
 }

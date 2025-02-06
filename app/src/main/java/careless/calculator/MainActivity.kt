@@ -8,11 +8,11 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import careless.calculator.display.CalculatorScreen
 import careless.calculator.ui.theme.CarelessCalculatorTheme
 
@@ -25,8 +25,22 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             CarelessCalculatorTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    CalculatorScreen(modifier = Modifier.padding(innerPadding),calculatorViewModel)
+                val navController = rememberNavController()
+                NavHost(navController = navController, startDestination = Nav.Calculator.name) {
+                    composable(route = Nav.Calculator.name) {
+                        Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                            CalculatorScreen(
+                                onNavigateToAboutScreen = { navController.navigate(Nav.About.name) },
+                                modifier = Modifier.padding(innerPadding),
+                                calculatorViewModel
+                            )
+                        }
+                    }
+                    composable(route = Nav.About.name) {
+                        Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                            AboutScreen(modifier = Modifier.padding(innerPadding))
+                        }
+                    }
                 }
             }
         }
