@@ -2,6 +2,7 @@ package careless.calculator.display
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -14,9 +15,12 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Menu
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -31,28 +35,32 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import careless.calculator.CalculatorViewModel
 import careless.calculator.R
 import kotlinx.coroutines.delay
 
-
 val buttonList = listOf(
     "C", "(", ")", "/",
     "7", "8", "9", "*",
     "4", "5", "6", "+",
     "1", "2", "3", "-",
-    "AC", "0", ".", "=",
+    "AC", "0", ".", "="
 )
 
 @Composable
-fun CalculatorScreen(modifier: Modifier, viewModel: CalculatorViewModel) {
-
+fun CalculatorScreen(
+    onNavigateToAboutScreen: () -> Unit,
+    modifier: Modifier,
+    viewModel: CalculatorViewModel
+) {
     val isMistake = viewModel.isMistake.collectAsState().value
     var backgroundAlpha by remember { mutableStateOf(0f) }
     LaunchedEffect(isMistake) {
@@ -71,7 +79,7 @@ fun CalculatorScreen(modifier: Modifier, viewModel: CalculatorViewModel) {
     Box(modifier = modifier) {
         if (isMistake) {
             Image(
-                painter = painterResource(id = R.drawable.musimegane), // 画像のリソースID
+                painter = painterResource(id = R.drawable.musimegane),
                 contentDescription = null,
                 modifier = Modifier
                     .fillMaxSize()
@@ -84,6 +92,16 @@ fun CalculatorScreen(modifier: Modifier, viewModel: CalculatorViewModel) {
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.End
         ) {
+            Icon(
+                imageVector = Icons.Rounded.Menu,
+                contentDescription = stringResource(id = com.google.android.gms.base.R.string.common_signin_button_text),
+                modifier = Modifier
+                    .size(50.dp)
+                    .clickable {
+                        onNavigateToAboutScreen()
+                    }
+            )
+
             if (isMistake) {
                 Card {
                     CardContents(
@@ -111,13 +129,14 @@ fun CalculatorScreen(modifier: Modifier, viewModel: CalculatorViewModel) {
                 columns = GridCells.Fixed(4)
             ) {
                 items(buttonList) {
-                    CalculatorButton(buttonText = it, onClick = {
-                        viewModel.onButtonClick(it)
-                    }
+                    CalculatorButton(
+                        buttonText = it,
+                        onClick = {
+                            viewModel.onButtonClick(it)
+                        }
                     )
                 }
             }
-
         }
     }
 }
@@ -163,4 +182,14 @@ fun backgroubdColor(buttonText: String): Color {
     }
 
     return Color.LightGray
+}
+
+@Preview
+@Composable
+fun CalculatorScreenPreview() {
+    CalculatorScreen(
+        onNavigateToAboutScreen = {},
+        modifier = Modifier,
+        viewModel = CalculatorViewModel()
+    )
 }
