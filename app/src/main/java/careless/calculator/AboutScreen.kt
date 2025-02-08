@@ -11,7 +11,7 @@ import androidx.compose.ui.platform.LocalContext
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 
 @Composable
-fun AboutScreen(modifier: Modifier = Modifier) {
+fun AboutScreen(toAgreementScreen: () -> Unit, modifier: Modifier = Modifier) {
     val context = LocalContext.current
     val activity = LocalContext.current as Activity
     Column(modifier = modifier) {
@@ -20,6 +20,12 @@ fun AboutScreen(modifier: Modifier = Modifier) {
             activity.startActivity(intent)
         }) {
             Text(text = "ライセンス")
+        }
+
+        Button(onClick = {
+            toAgreementScreen()
+        }) {
+            Text(text = "利用規約")
         }
     }
 }
