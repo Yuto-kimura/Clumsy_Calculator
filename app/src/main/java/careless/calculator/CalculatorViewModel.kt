@@ -8,8 +8,8 @@ import kotlin.random.Random
 
 class CalculatorViewModel : ViewModel() {
 
-    private val _resultText = MutableStateFlow("")
-    val resultText = _resultText.asStateFlow()
+    private val _trueResult = MutableStateFlow("")
+    val trueResult = _trueResult.asStateFlow()
 
     private val _isMistake = MutableStateFlow(false)
     val isMistake = _isMistake.asStateFlow()
@@ -18,24 +18,24 @@ class CalculatorViewModel : ViewModel() {
     val falseResult = _falseResult.asStateFlow()
 
     fun onButtonClick(button: String) {
-        _resultText.value.let {
+        _trueResult.value.let {
             if (button == "AC") {
-                _resultText.value = "0"
+                _trueResult.value = "0"
                 _isMistake.value = false
                 return
             }
 
             if (button == "C") {
                 if (it.isNotEmpty()) {
-                    _resultText.value = it.substring(0, it.length - 1)
+                    _trueResult.value = it.substring(0, it.length - 1)
                 }
                 return
             }
 
             if (button == "=") {
                 try {
-                    val trueResult = calculateResult(resultText.value)
-                    _resultText.value = trueResult
+                    val trueResult = calculateResult(trueResult.value)
+                    _trueResult.value = trueResult
 
                     _isMistake.value = isMistake(trueResult)
                     if (isMistake.value) {
@@ -45,7 +45,7 @@ class CalculatorViewModel : ViewModel() {
                 }
                 return
             }
-            _resultText.value = it + button
+            _trueResult.value = it + button
         }
     }
 
@@ -56,7 +56,7 @@ class CalculatorViewModel : ViewModel() {
         // 1.1から1.5の範囲の乱数を生成
         val randomValue = 1.1 + (Random.nextDouble() * 0.4)
         val trueFloatResult = trueResult.toFloat()
-        return (randomValue * trueFloatResult).toString()
+        return (randomValue * trueFloatResult).toInt().toString()
     }
 
     /**

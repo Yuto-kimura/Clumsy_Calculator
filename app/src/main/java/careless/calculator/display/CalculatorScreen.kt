@@ -62,6 +62,14 @@ fun CalculatorScreen(
     viewModel: CalculatorViewModel
 ) {
     val isMistake = viewModel.isMistake.collectAsState().value
+    var calculationResults = ""
+
+    if (isMistake) {
+        calculationResults = viewModel.falseResult.collectAsState().value
+    } else {
+        calculationResults = viewModel.trueResult.collectAsState().value
+    }
+
     var backgroundAlpha by remember { mutableStateOf(0f) }
     LaunchedEffect(isMistake) {
         if (isMistake) {
@@ -106,7 +114,7 @@ fun CalculatorScreen(
                 Card {
                     CardContents(
                         title = "おっとっと!! 正しい値は・・・",
-                        resultText = viewModel.resultText.collectAsState().value
+                        resultText = viewModel.trueResult.collectAsState().value
                     )
                 }
             }
@@ -114,7 +122,7 @@ fun CalculatorScreen(
             Spacer(modifier = Modifier.weight(1f))
 
             Text(
-                text = viewModel.resultText.collectAsState().value,
+                text = calculationResults,
                 style = TextStyle(
                     fontSize = 60.sp,
                     textAlign = TextAlign.End
