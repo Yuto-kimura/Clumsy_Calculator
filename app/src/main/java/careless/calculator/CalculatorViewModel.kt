@@ -45,7 +45,12 @@ class CalculatorViewModel : ViewModel() {
                 }
                 return
             }
-            _trueResult.value = it + button
+
+            if (it != "0") {
+                _trueResult.value = it + button
+            } else {
+                _trueResult.value = button
+            }
         }
     }
 

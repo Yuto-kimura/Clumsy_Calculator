@@ -7,18 +7,13 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Menu
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -31,13 +26,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -46,14 +39,6 @@ import androidx.compose.ui.unit.sp
 import careless.calculator.CalculatorViewModel
 import careless.calculator.R
 import kotlinx.coroutines.delay
-
-val buttonList = listOf(
-    "C", "(", ")", "/",
-    "7", "8", "9", "*",
-    "4", "5", "6", "+",
-    "1", "2", "3", "-",
-    "AC", "0", ".", "="
-)
 
 @Composable
 fun CalculatorScreen(
@@ -68,6 +53,10 @@ fun CalculatorScreen(
         calculationResults = viewModel.falseResult.collectAsState().value
     } else {
         calculationResults = viewModel.trueResult.collectAsState().value
+    }
+
+    val buttonDataList = remember {
+        ButtonDataList().buttonDataList
     }
 
     var backgroundAlpha by remember { mutableStateOf(0f) }
@@ -136,60 +125,18 @@ fun CalculatorScreen(
             LazyVerticalGrid(
                 columns = GridCells.Fixed(4)
             ) {
-                items(buttonList) {
+                items(buttonDataList) {
                     CalculatorButton(
-                        buttonText = it,
+                        buttonData = it,
                         onClick = {
-                            viewModel.onButtonClick(it)
-                        }
+                            viewModel.onButtonClick(it.buttonText)
+                        },
+                        isMistake = isMistake
                     )
                 }
             }
         }
     }
-}
-
-@Composable
-fun CalculatorButton(buttonText: String, onClick: () -> Unit, modifier: Modifier = Modifier) {
-    Box(modifier = Modifier.padding(8.dp)) {
-        Button(
-            onClick = onClick,
-            modifier = Modifier
-                .fillMaxWidth()
-                .size(90.dp),
-            shape = CircleShape,
-            // TODO
-            enabled = true,
-            colors = ButtonDefaults.buttonColors(
-                containerColor = backgroubdColor(buttonText),
-                disabledContainerColor = Color(0xFFE0E0E0)
-            )
-        ) {
-            Text(
-                modifier = modifier,
-                text = buttonText,
-                fontSize = 30.sp,
-                fontWeight = FontWeight.Bold
-            )
-        }
-    }
-}
-
-@Composable
-fun backgroubdColor(buttonText: String): Color {
-    if (buttonText == "C" || buttonText == "(" || buttonText == ")") {
-        return Color(0xFFFFA726)
-    }
-
-    if (buttonText == "AC") {
-        return Color.Red
-    }
-
-    if (buttonText == "/" || buttonText == "*" || buttonText == "+" || buttonText == "-" || buttonText == "=") {
-        return Color(0xFF80DEEA)
-    }
-
-    return Color.LightGray
 }
 
 @Preview
