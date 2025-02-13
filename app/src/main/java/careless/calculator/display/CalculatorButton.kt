@@ -17,26 +17,25 @@ import androidx.compose.ui.unit.sp
 
 @Composable
 fun CalculatorButton(buttonData: ButtonData, onClick: () -> Unit, modifier: Modifier = Modifier, isMistake: Boolean = true) {
-    Box(modifier = Modifier.padding(8.dp)) {
-        Button(
-            onClick = onClick,
-            modifier = Modifier
-                .fillMaxWidth()
-                .size(90.dp),
-            shape = CircleShape,
-            enabled = buttonData.isValid(isMistake),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = backgroundColor(buttonData.buttonText),
-                disabledContainerColor = Color(0xFFE0E0E0)
-            )
-        ) {
-            Text(
-                modifier = modifier,
-                text = buttonData.buttonText,
-                fontSize = 30.sp,
-                fontWeight = FontWeight.Bold
-            )
-        }
+    Button(
+        onClick = onClick,
+        modifier = modifier
+            .fillMaxWidth()
+            .size(90.dp)
+            .padding(5.dp),
+        shape = CircleShape,
+        enabled = buttonData.isValid(isMistake),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = backgroundColor(buttonData.buttonText),
+            disabledContainerColor = Color(0xFFE0E0E0)
+        )
+    ) {
+        Text(
+            modifier = modifier,
+            text = buttonData.buttonText,
+            fontSize = 30.sp,
+            fontWeight = FontWeight.Bold
+        )
     }
 }
 
