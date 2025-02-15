@@ -62,6 +62,26 @@ fun AboutScreen(goBackTop: () -> Unit, toAgreementScreen: () -> Unit, modifier: 
                     fontSize = 20.sp
                 )
             }
+
+            TextButton(
+                onClick = {
+                    toAgreementScreen()
+                },
+                enabled = false
+            ) {
+                Column {
+                    Text(
+                        text = "アプリバージョン",
+                        color = MaterialTheme.colorScheme.onBackground,
+                        fontSize = 20.sp
+                    )
+                    Text(
+                        text = "1.0.0",
+                        color = MaterialTheme.colorScheme.onBackground,
+                        fontSize = 15.sp
+                    )
+                }
+            }
         }
     }
 }
