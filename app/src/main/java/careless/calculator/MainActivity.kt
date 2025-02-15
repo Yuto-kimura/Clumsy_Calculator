@@ -37,12 +37,10 @@ class MainActivity : ComponentActivity() {
                         }
                     }
                     composable(route = Nav.About.name) {
-                        Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                            AboutScreen(
-                                toAgreementScreen = { navController.navigate(Nav.Agreement.name) },
-                                modifier = Modifier.padding(innerPadding)
-                            )
-                        }
+                        AboutScreen(
+                            goBackTop = { navController.navigate(Nav.Calculator.name) },
+                            toAgreementScreen = { navController.navigate(Nav.Agreement.name) }
+                        )
                     }
                     composable(route = Nav.Agreement.name) {
                         Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
